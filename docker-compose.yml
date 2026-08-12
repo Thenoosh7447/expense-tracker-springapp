@@ -1,0 +1,14 @@
+services:
+  app:
+    image: ${IMAGE_NAME}
+    container_name: exp-track-con
+    env_file:
+      - .env.application
+    networks:
+      - exp-track-bridge
+    restart: always
+    ports:
+      - "8080:8080"
+
+networks:
+  exp-track-bridge:
