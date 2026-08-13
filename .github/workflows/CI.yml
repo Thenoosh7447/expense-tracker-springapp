@@ -7,6 +7,7 @@ on:
 
 permissions: 
   id-token: write
+  contents: read
 
 jobs:
   BuildnPush:
@@ -38,7 +39,10 @@ jobs:
           context: .
           push: true
           tags: thenoosh/exp-track-img:${{ github.sha }}
-
+          
+      - name: Debug OIDC claims
+        uses: github/actions-oidc-debugger@main
+  
       - name: AWS Login
         uses: aws-actions/configure-aws-credentials@v2
         with:
