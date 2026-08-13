@@ -5,6 +5,9 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions: 
+  id-token: write
+
 jobs:
   BuildnPush:
     runs-on: ubuntu-latest
@@ -35,4 +38,17 @@ jobs:
           context: .
           push: true
           tags: thenoosh/exp-track-img:${{ github.sha }}
+
+      - name: AWS Login
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::779679300431:role/github-to-aws-oicd
+          aws-region: ap-south-1
+
+      - name: COPY env Image Name
+        run: |
+          echo "IMAGE_NAME=thenoosh/exp-track-img:$IMAGE_TAG" > .env.container
+
+      - name: S3 upload
+        run: aws s3 cp .env.container s3://amzn-s3-expense-tracker-application 
         
