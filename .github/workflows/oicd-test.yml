@@ -2,8 +2,10 @@ name: Testing the OICD connection
 
 on:
   workflow_dispatch: 
-permissions: 
-  id-token: write
+  
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
 
 jobs:
   test:
@@ -12,9 +14,6 @@ jobs:
     steps:
       - name: Repository Checkout
         uses: actions/checkout@v4
-        
-      - name: Debug OIDC claims
-        uses: github/actions-oidc-debugger@main
         
       - name: AWS login OIDC
         uses: aws-actions/configure-aws-credentials@v4
