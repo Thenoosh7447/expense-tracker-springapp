@@ -9,16 +9,30 @@ jobs:
   BuildnPush:
     runs-on: ubuntu-latest
 
-  steps:
-    - name: Repository Checkout
-      uses: actions/checkout@v4
-
-    - name: Docker Setup Buildx
-      uses: docker/setup-buildx-action@v4
-
-    - name: Docker Login
-      uses: docker/login-action@v3
-      with: 
-        username: ${{ secrets.DOCKERHUB_ACTIONS_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_ACTIONS_PAT }}
+    steps:
+      - name: Repository Checkout
+        uses: actions/checkout@v4
+  
+      - name: Setup Java
+        uses: action/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+            
+      - name: Docker Setup Buildx
+        uses: docker/setup-buildx-action@v4
+  
+      - name: Docker Login
+        uses: docker/login-action@v3
+        with: 
+          username: ${{ secrets.DOCKERHUB_ACTIONS_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_ACTIONS_PAT }}
+  
+      - name: Build and Push Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: thenoosh/exp-track-img:${{ github.sha }}
         
