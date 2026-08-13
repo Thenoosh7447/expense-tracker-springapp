@@ -47,7 +47,7 @@ jobs:
 
       - name: COPY env Image Name
         run: |
-          echo "IMAGE_NAME=thenoosh/exp-track-img:$IMAGE_TAG" > .env.container
+          echo "IMAGE_NAME=thenoosh/exp-track-img:${{ github.sha }}" > .env.container
 
       - name: S3 upload
         run: aws s3 cp .env.container s3://amzn-s3-expense-tracker-application 
