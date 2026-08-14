@@ -40,13 +40,10 @@ jobs:
           push: true
           tags: thenoosh/exp-track-img:${{ github.sha }}
           
-      - name: Debug OIDC claims
-        uses: github/actions-oidc-debugger@main
-  
       - name: AWS Login
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4.1.0
         with:
-          role-to-assume: arn:aws:iam::779679300431:role/github-to-aws-oicd
+          role-to-assume: arn:aws:iam::779679300431:role/github-aws-oidc
           aws-region: ap-south-1
 
       - name: COPY env Image Name
