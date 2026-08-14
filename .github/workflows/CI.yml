@@ -52,4 +52,9 @@ jobs:
 
       - name: S3 upload
         run: aws s3 cp .env.container s3://amzn-s3-expense-tracker-application 
-        
+
+      - name: Instance Refresh
+        run: |
+          aws autoscaling start-instance-refresh \
+            --auto-scaling-group-name asg-main \
+            --preferences MinHealthyPercentage=50,AutoRollback=true,InstanceWarmup=120
