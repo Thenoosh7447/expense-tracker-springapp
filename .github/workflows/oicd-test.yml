@@ -18,7 +18,7 @@ jobs:
       - name: AWS login OIDC
         uses: aws-actions/configure-aws-credentials@v4.1.0
         with:
-          role-to-assume: arn:aws:iam::779679300431:role/github-oidc-role
+          role-to-assume: arn:aws:iam::779679300431:role/github-aws-oidc
           aws-region: ap-south-1
 
       - name: Check a service
