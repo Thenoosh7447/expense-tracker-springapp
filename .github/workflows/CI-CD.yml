@@ -60,10 +60,4 @@ jobs:
         run: |
           aws autoscaling start-instance-refresh \
             --auto-scaling-group-name asg-main \
-            --desired-configuration '{
-                "LaunchTemplate": {
-                  "LaunchTemplateName": "webserver-launch-template-danny",
-                  "Version": "$Latest"
-                }
-              }' \
-            --preferences MinHealthyPercentage=50,AutoRollback=true,InstanceWarmup=120
+            --preferences MinHealthyPercentage=50,AutoRollback=false,InstanceWarmup=120
