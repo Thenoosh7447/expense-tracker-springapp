@@ -22,5 +22,5 @@ jobs:
           aws-region: ap-south-1
 
       - name: Check a service
-        run: aws s3api list-objects-v2 --bucket s3://amzn-s3-expense-tracker-application --query 'Contents[].Key' --output text   
+        run: aws s3api list-objects-v2 --bucket amzn-s3-expense-tracker-application --query 'Contents[].Key' --output text   
 
