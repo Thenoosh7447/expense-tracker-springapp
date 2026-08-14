@@ -1,4 +1,4 @@
-name: Build and Upload Image
+name: Build and Deploy
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  BuildnPush:
+  BuildnDeploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,11 +18,14 @@ jobs:
         uses: actions/checkout@v4
   
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+          
+      - name: Build and Test
+        run: mvn clean verify
             
       - name: Docker Setup Buildx
         uses: docker/setup-buildx-action@v4
@@ -40,13 +43,10 @@ jobs:
           push: true
           tags: thenoosh/exp-track-img:${{ github.sha }}
           
-      - name: Debug OIDC claims
-        uses: github/actions-oidc-debugger@main
-  
       - name: AWS Login
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4.1.0
         with:
-          role-to-assume: arn:aws:iam::779679300431:role/github-to-aws-oicd
+          role-to-assume: arn:aws:iam::779679300431:role/github-aws-oidc
           aws-region: ap-south-1
 
       - name: COPY env Image Name
@@ -54,5 +54,10 @@ jobs:
           echo "IMAGE_NAME=thenoosh/exp-track-img:${{ github.sha }}" > .env.container
 
       - name: S3 upload
-        run: aws s3 cp .env.container s3://amzn-s3-expense-tracker-application 
-        
+        run: aws s3 cp .env.container s3://amzn-s3-expense-tracker-application/.env.container
+
+      - name: Instance Refresh
+        run: |
+          aws autoscaling start-instance-refresh \
+            --auto-scaling-group-name asg-main \
+            --preferences MinHealthyPercentage=50,AutoRollback=false,InstanceWarmup=120
