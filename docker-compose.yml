@@ -9,29 +9,6 @@ services:
     restart: always
     ports:
       - "8080:8080"
-    depends_on:
-      mysql:
-        condition: service_healthy
-
-
-  mysql:
-    image: mysql:8.0
-    container_name: exp-track-mysql
-    env_file:
-      - .env.application
-    networks:
-      - exp-track-bridge
-    restart: always
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql-data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 1m30s
-      timeout: 30s
-      retries: 5
-      start_period: 30s
 
 networks:
   exp-track-bridge:
