@@ -2,6 +2,7 @@ name: Sync S3 for Frontend
 
 on:
   push:
+    branches: [ dev ]
     paths :
       - 'frontend/**'
   workflow_dispatch:
