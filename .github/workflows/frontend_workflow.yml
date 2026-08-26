@@ -1,6 +1,9 @@
 name: Sync S3 for Frontend
 
 on:
+  push:
+    paths :
+      - 'frontend/**'
   workflow_dispatch:
 
 permissions: 
