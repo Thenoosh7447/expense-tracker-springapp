@@ -1,8 +1,6 @@
 name: Sync S3 for Frontend
 
 on:
-  push: 
-    branches: dev
   workflow_dispatch:
 
 permissions: 
@@ -16,7 +14,24 @@ jobs:
     steps:
       - name: Repo Checkout
         uses: actions/checkout@v4
-    
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build React app
+        working-directory: frontend
+        env:
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
+        run: npm run build
+
       - name: AWS Login
         uses: aws-actions/configure-aws-credentials@v4.1.0
         with:
@@ -24,4 +39,10 @@ jobs:
           aws-region: ap-south-1
 
       - name: AWS S3 Sync
-        run: aws s3 sync ./frontend s3://frontend-bucket-terraform-2026
+        run: aws s3 sync frontend/dist/ s3://${{ vars.frontend_bucket }} --delete
+
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id d140o4r75nv8xt.cloudfront.net \
+            --paths "/*"
