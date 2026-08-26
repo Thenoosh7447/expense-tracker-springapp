@@ -1,6 +1,8 @@
 name: Sync S3 for Frontend
 
-on: 
+on:
+  push: 
+    branches: dev
   workflow_dispatch:
 
 permissions: 
