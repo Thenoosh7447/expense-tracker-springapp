@@ -12,3 +12,6 @@ services:
 
 networks:
   exp-track-bridge:
+
+volumes:
+  mysql-data:

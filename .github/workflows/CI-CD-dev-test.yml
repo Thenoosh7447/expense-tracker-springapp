@@ -1,8 +1,7 @@
 name: Build and Deploy(in Dev)
 
 on:
-  push:
-    branches: [ dev ]
+ 
   workflow_dispatch:
 
 permissions: 
