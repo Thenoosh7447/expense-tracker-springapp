@@ -49,6 +49,9 @@ jobs:
           role-to-assume: arn:aws:iam::779679300431:role/github-aws-oidc
           aws-region: ap-south-1
 
+      - name: Upload Docker Compose
+        run: aws s3 cp docker-compose.yml s3://amzn-s3-expense-tracker-application/docker-compose.yml
+        
       - name: COPY env Image Name
         run: |
           echo "IMAGE_NAME=thenoosh/exp-track-img:${{ github.sha }}" > .env.container
