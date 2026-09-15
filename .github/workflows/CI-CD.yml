@@ -46,7 +46,7 @@ jobs:
       - name: AWS Login
         uses: aws-actions/configure-aws-credentials@v4.1.0
         with:
-          role-to-assume: arn:aws:iam::779679300431:role/github-aws-oidc
+          role-to-assume: arn:aws:iam::092860034104:role/github-aws-oidc
           aws-region: ap-south-1
 
       - name: Upload Docker Compose
